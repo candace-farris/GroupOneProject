@@ -1,7 +1,6 @@
 package com.groupone;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
@@ -17,14 +16,26 @@ public abstract class SocketInteractions {
     private ObjectOutputStream mObjectOutputStream;
     private Socket clientSocket;
 
+
     /*
-    A method to wire up the the socket's input and output streams
+   Wire input and output streams using ObjectInputStream() and ObjectOutputStream().
+Chose to use these because they are more general and can handle most types of IO.
+
+I think this will also allow us to pass classes and methods across the stream, which may
+be very useful... not 100% on that though.
+
+    https://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html
+    http://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html
      */
+
+
+
+
     public void wireIO() throws IOException {
-        mObjectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-        mObjectInputStream = new ObjectInputStream(clientSocket.getInputStream());
+        mObjectOutputStream = new ObjectOutputStream(getClientSocket().getOutputStream());
+        mObjectInputStream = new ObjectInputStream(getClientSocket().getInputStream());
         mObjectOutputStream.flush();
-        System.out.println("Client input/output wired up");
+
 
         /*
         A method to execute the basic file transfer functionality
@@ -36,7 +47,7 @@ public abstract class SocketInteractions {
 
     private void copyFile(InputStream in, OutputStream out) throws IOException{
         byte[] buffer = new byte[8192]; //2^13 bytes.
-        int count = 0;
+        int count;
         while ((count = in.read(buffer)) != -1) {
             out.write(buffer, 0, count);
         }
@@ -45,11 +56,11 @@ public abstract class SocketInteractions {
 
     }
 
-    public void downloadFile(String fileName) throws FileNotFoundException, IOException{
+    public void downloadFile(String fileName) throws IOException{
         copyFile(mObjectInputStream, new FileOutputStream(FILEPATH+fileName));
     }
 
-    public void uploadFile(String fileName) throws IOException,FileNotFoundException{
+    public void uploadFile(String fileName) throws IOException{
         copyFile(new FileInputStream(FILEPATH+fileName), mObjectOutputStream);
     }
 
