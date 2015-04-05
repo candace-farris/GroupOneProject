@@ -1,8 +1,8 @@
 package com.groupone;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 /**
  * Created by Tyler on 3/31/2015.
@@ -42,35 +42,19 @@ public class Server extends SocketInteractions{
                 + getClientSocket().getRemoteSocketAddress());
 
 
-        wireServerIO();
+        wireIO();
         System.out.println("Streams all wired up.");
             runClientListener();
 
     }
     /*
-   Wire input and output streams using ObjectInputStream() and ObjectOutputStream().
-Chose to use these because they are more general and can handle most types of IO.
-
-I think this will also allow us to pass classes and methods across the stream, which may
-be very useful... not 100% on that though.
-
-    https://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html
-    http://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html
-     */
-
-    private void wireServerIO() throws IOException{
-        setObjectInputStream(new ObjectInputStream(getClientSocket().getInputStream()));
-        setObjectOutputStream(new ObjectOutputStream(getClientSocket().getOutputStream()));
-        getObjectOutputStream().flush();
-    }
-
-    /*
-    A method to listen for commands from the client
-     */
+   A method to listen for commands from the client
+    */
     private void runClientListener() throws ClassNotFoundException,IOException{
         System.out.println("Server is Listening");
-        while(true) {
-            String clientInput = (String) getObjectInputStream().readObject();
+        String clientInput;
+        while(( clientInput = (String) getObjectInputStream().readObject()) != null) {
+
             String [] tokenArray = clientInput.split(" ");
 
             //just a test case, commands will be filled into the switch as
