@@ -35,7 +35,7 @@ be very useful... not 100% on that though.
         mObjectOutputStream = new ObjectOutputStream(getClientSocket().getOutputStream());
         mObjectInputStream = new ObjectInputStream(getClientSocket().getInputStream());
         mObjectOutputStream.flush();
-        System.out.println("Client input/output wired up");
+
 
         /*
         A method to execute the basic file transfer functionality

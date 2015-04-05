@@ -1,6 +1,9 @@
 package com.groupone;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 /**
@@ -11,17 +14,18 @@ public class Client extends SocketInteractions {
     private final String DEFAULT_FILE_PATH = "C:\\Users\\Tyler\\Documents\\THIS IS A TEST FOLDER FOR THE CLIENT\\";
 
 
-    public Client() throws IOException, FileNotFoundException, ClassNotFoundException{
+    public Client() throws IOException,  ClassNotFoundException{
         //We will eventually push socket IP and port assignment to a method buildConnection() to be executed by
         //the CommandLine. For now it is hard wired for ease of use.
         setClientSocket(new Socket("localhost", 81));
         setFilePath(DEFAULT_FILE_PATH);
 
         System.out.println("Client searching for server");
-        System.out.println("Just connected to "
+        System.out.println("Client just connected to "
                 + getClientSocket().getRemoteSocketAddress());
 
         wireIO();
+        System.out.println("Client input/output wired up");
         runCommandLine();
 
 

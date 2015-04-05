@@ -38,12 +38,12 @@ public class Server extends SocketInteractions{
         System.out.println("Waiting for getClientSocket()...");
 
            setClientSocket(mServerSocket.accept());
-        System.out.println("Just connected to "
+        System.out.println("Server just connected to "
                 + getClientSocket().getRemoteSocketAddress());
 
 
         wireIO();
-        System.out.println("Streams all wired up.");
+        System.out.println("Server input/output wired up");
             runClientListener();
 
     }
@@ -51,7 +51,7 @@ public class Server extends SocketInteractions{
    A method to listen for commands from the client
     */
     private void runClientListener() throws ClassNotFoundException,IOException{
-        System.out.println("Server is Listening");
+        System.out.println("Server is Listening...");
         String clientInput;
         while(( clientInput = (String) getObjectInputStream().readObject()) != null) {
 
