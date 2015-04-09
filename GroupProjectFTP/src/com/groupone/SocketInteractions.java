@@ -19,10 +19,10 @@ public abstract class SocketInteractions {
 
     /*
    Wire input and output streams using ObjectInputStream() and ObjectOutputStream().
-Chose to use these because they are more general and can handle most types of IO.
+    Chose to use these because they are more general and can handle most types of IO.
 
-I think this will also allow us to pass classes and methods across the stream, which may
-be very useful... not 100% on that though.
+    I think this will also allow us to pass classes and methods across the stream, which may
+    be very useful... not 100% on that though.
 
     https://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html
     http://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html
@@ -35,7 +35,7 @@ be very useful... not 100% on that though.
         mObjectOutputStream = new ObjectOutputStream(getClientSocket().getOutputStream());
         mObjectInputStream = new ObjectInputStream(getClientSocket().getInputStream());
         mObjectOutputStream.flush();
-
+        System.out.println(Strings.WIRED_UP);
 
         /*
         A method to execute the basic file transfer functionality
@@ -52,18 +52,27 @@ be very useful... not 100% on that though.
             out.write(buffer, 0, count);
         }
         out.flush();
-        System.out.println("endo of copy file");
 
     }
 
     public void downloadFile(String fileName) throws IOException{
-        copyFile(mObjectInputStream, new FileOutputStream(FILEPATH+fileName));
+        copyFile(mObjectInputStream, new FileOutputStream(FILEPATH + fileName));
     }
 
     public void uploadFile(String fileName) throws IOException{
         copyFile(new FileInputStream(FILEPATH+fileName), mObjectOutputStream);
     }
 
+    /*
+   A method which tears down the connection between the server and the client socket
+    */
+    public void teardown() throws IOException{
+        getObjectOutputStream().flush();
+        getObjectOutputStream().close();
+        getObjectInputStream().close();
+        getClientSocket().close();
+
+    }
 
     /*
     -------------------------------------GETTERS AND SETTERS------------------------------------------

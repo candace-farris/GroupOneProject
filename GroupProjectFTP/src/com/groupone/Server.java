@@ -27,7 +27,6 @@ public class Server extends SocketInteractions{
     public Server(int port)throws IOException{
         setFilePath(DEFAULT_FILE_PATH);
        mServerSocket = new ServerSocket(port);
-       System.out.println("Server port number: " + this.getServerSocket().getLocalPort());
 
     }
 
@@ -35,23 +34,22 @@ public class Server extends SocketInteractions{
  A method to wire up the getClientSocket() socket as well as the IO streams once a getClientSocket() is made.
   */
     public void wireConnection() throws IOException, ClassNotFoundException{
-        System.out.println("Waiting for getClientSocket()...");
+        System.out.println(Strings.CONNECTION_SEARCHING);
 
            setClientSocket(mServerSocket.accept());
-        System.out.println("Server just connected to "
+        System.out.println(Strings.CONNECTION_GOOD + ": "
                 + getClientSocket().getRemoteSocketAddress());
 
 
         wireIO();
-        System.out.println("Server input/output wired up");
-            runClientListener();
+        runClientListener();
 
     }
+
     /*
-   A method to listen for commands from the client
+   A method to listen for and execute commands from the client
     */
     private void runClientListener() throws ClassNotFoundException,IOException{
-        System.out.println("Server is Listening...");
         String clientInput;
         while(( clientInput = (String) getObjectInputStream().readObject()) != null) {
 
@@ -61,18 +59,23 @@ public class Server extends SocketInteractions{
             //developed
             //utilizing default as echo for testing
             switch (tokenArray[0]){
-                case("test"):
-                    System.out.println("test heard");
-                    getObjectOutputStream().writeObject("test success");
-                    break;
-                case("upload"):
+                case(Strings.UPLOAD_COMMAND):
                     try{
-                    System.out.println("The server is uploading the file " + tokenArray[1]);
+                    System.out.println(Strings.UPLOADING_FILE + tokenArray[1]);
                     uploadFile(tokenArray[1]);}catch (FileNotFoundException e){
-                        System.out.println("The server could not find the file +" +tokenArray[1] + " in the provided directory. " +getFilePath());
+                        System.out.println(Strings.COMPLAIN_FILE_NOT_FOUND);
                     }
                     break;
-
+                case(Strings.TEARDOWN_COMMAND):
+                    try {
+                        teardown();
+                        wireConnection();
+                    }catch (IOException e){
+                        System.out.println(Strings.COMPLAIN_TEARDOWN);
+                        e.printStackTrace();
+                        break;
+                }
+                    break;
                 default:
                     System.out.println("The client says " + clientInput);
                     getObjectOutputStream().writeObject("echo: " + clientInput);
