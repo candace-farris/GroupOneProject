@@ -1,5 +1,9 @@
-package com.groupone;
+package groupone;
 
+/**
+ *
+ * @author Candace
+ */
 import java.io.*;
 import java.net.Socket;
 
@@ -20,10 +24,8 @@ public abstract class SocketInteractions {
     /*
    Wire input and output streams using ObjectInputStream() and ObjectOutputStream().
 Chose to use these because they are more general and can handle most types of IO.
-
 I think this will also allow us to pass classes and methods across the stream, which may
 be very useful... not 100% on that though.
-
     https://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html
     http://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html
      */
@@ -52,7 +54,7 @@ be very useful... not 100% on that though.
             out.write(buffer, 0, count);
         }
         out.flush();
-        System.out.println("endo of copy file");
+        System.out.println("end of copy file");
 
     }
 
@@ -64,7 +66,17 @@ be very useful... not 100% on that though.
         copyFile(new FileInputStream(FILEPATH+fileName), mObjectOutputStream);
     }
 
-
+    /*
+    Method closes the server and client sockets and closes the program.
+    */
+    private void closeProgram() throws IOException{
+        clientSocket.close();
+       //server socket
+        System.out.println("Closing server and client sockets...");
+        System.out.println("\nThe server and client have been closed. Thank you.");
+        int status = 0;
+        Runtime.getRuntime().exit(status); //Terminates currently running program
+    }
     /*
     -------------------------------------GETTERS AND SETTERS------------------------------------------
      */
