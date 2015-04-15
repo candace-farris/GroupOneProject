@@ -1,11 +1,14 @@
-package com.groupone;
+package groupone;
 
-
-
+/** Author: <<Candace Farris>>
+ *  Date: 4/14/15
+ *  Task: 
+ */
+import com.sun.corba.se.spi.activation.Server;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Main {
+public class GroupOne {
     private static final String IP_ADDRESS="localhost";
     private static final int PORT =81;
 
@@ -39,9 +42,5 @@ public class Main {
                }
          }
         }.start();
-
-
-
     }
-
 }
