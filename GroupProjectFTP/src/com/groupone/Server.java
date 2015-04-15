@@ -1,8 +1,9 @@
-package com.groupone;
+package groupone;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Created by Tyler on 3/31/2015.
@@ -10,11 +11,9 @@ import java.net.ServerSocket;
  */
 public class Server extends SocketInteractions{
 
-
     private final String DEFAULT_FILE_PATH = "C:\\Users\\Tyler\\Documents\\THIS IS A TEST FOLDER FOR THE SERVER\\";
     private String FILENAME;
     private ServerSocket mServerSocket;
-
 
     /*
     Constructor will take an (int)port as argument
@@ -36,16 +35,27 @@ public class Server extends SocketInteractions{
   */
     public void wireConnection() throws IOException, ClassNotFoundException{
         System.out.println("Waiting for getClientSocket()...");
+        ServerSocket serverSocket = null;
 
-           setClientSocket(mServerSocket.accept());
-        System.out.println("Server just connected to "
-                + getClientSocket().getRemoteSocketAddress());
+        try {
+            serverSocket = new ServerSocket(81);
+        } catch (IOException e) {
+            System.err.println("Could not listen on port: " + serverSocket.getLocalPort());
+            System.exit(1);
+        }
 
-
+        try {
+            setClientSocket(mServerSocket.accept());
+            System.out.println("Server just connected to "
+                    + getClientSocket().getRemoteSocketAddress());
+        } catch (IOException e) {
+            System.err.println("Accept failed.");
+            System.exit(1);
+        }
+        
         wireIO();
-        System.out.println("Server input/output wired up");
+        System.out.println("Server input/output wired up.");
             runClientListener();
-
     }
     /*
    A method to listen for commands from the client
