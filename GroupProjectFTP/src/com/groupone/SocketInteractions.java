@@ -11,7 +11,7 @@ import java.net.Socket;
  */
 public abstract class SocketInteractions {
 
-    private String FILEPATH;
+    private String filePath;
     private ObjectInputStream mObjectInputStream;
     private ObjectOutputStream mObjectOutputStream;
     private Socket clientSocket;
@@ -20,10 +20,8 @@ public abstract class SocketInteractions {
     /*
    Wire input and output streams using ObjectInputStream() and ObjectOutputStream().
     Chose to use these because they are more general and can handle most types of IO.
-
     I think this will also allow us to pass classes and methods across the stream, which may
     be very useful... not 100% on that though.
-
     https://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html
     http://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html
      */
@@ -45,22 +43,26 @@ public abstract class SocketInteractions {
          */
     }
 
-    private void copyFile(InputStream in, OutputStream out) throws IOException{
+    private void copyFile(InputStream in, OutputStream out, boolean isUpload) throws IOException{
         byte[] buffer = new byte[8192]; //2^13 bytes.
         int count;
         while ((count = in.read(buffer)) != -1) {
             out.write(buffer, 0, count);
         }
+
         out.flush();
+        in.close();
+       // out.close();
 
     }
 
     public void downloadFile(String fileName) throws IOException{
-        copyFile(mObjectInputStream, new FileOutputStream(FILEPATH + fileName));
+        copyFile(mObjectInputStream, new DataOutputStream(new FileOutputStream(filePath + fileName)), false);
     }
 
     public void uploadFile(String fileName) throws IOException{
-        copyFile(new FileInputStream(FILEPATH+fileName), mObjectOutputStream);
+        copyFile(new DataInputStream(new FileInputStream(filePath+fileName)), mObjectOutputStream,true);
+
     }
 
     /*
@@ -103,11 +105,11 @@ public abstract class SocketInteractions {
     }
 
     public String getFilePath() {
-        return FILEPATH;
+        return filePath;
     }
 
-    public void setFilePath(String FILEPATH) {
-        this.FILEPATH = FILEPATH;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
 

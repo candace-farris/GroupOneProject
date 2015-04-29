@@ -7,12 +7,14 @@ import java.net.ServerSocket;
 /**
  * Created by Tyler on 3/31/2015.
  *
+ * This is going to act as a server program.
+ *
  */
 public class Server extends SocketInteractions{
 
 
     private final String DEFAULT_FILE_PATH = "C:\\Users\\Tyler\\Documents\\THIS IS A TEST FOLDER FOR THE SERVER\\";
-    private String FILENAME;
+    private String fileName;
     private ServerSocket mServerSocket;
 
 
@@ -34,11 +36,11 @@ public class Server extends SocketInteractions{
  A method to wire up the getClientSocket() socket as well as the IO streams once a getClientSocket() is made.
   */
     public void wireConnection() throws IOException, ClassNotFoundException{
-        System.out.println(Strings.CONNECTION_SEARCHING);
+       // System.out.println(Strings.CONNECTION_SEARCHING);
 
            setClientSocket(mServerSocket.accept());
-        System.out.println(Strings.CONNECTION_GOOD + ": "
-                + getClientSocket().getRemoteSocketAddress());
+       // System.out.println(Strings.CONNECTION_GOOD + ": "
+      //          + getClientSocket().getRemoteSocketAddress());
 
 
         wireIO();
@@ -62,8 +64,11 @@ public class Server extends SocketInteractions{
                 case(Strings.UPLOAD_COMMAND):
                     try{
                     System.out.println(Strings.UPLOADING_FILE + tokenArray[1]);
-                    uploadFile(tokenArray[1]);}catch (FileNotFoundException e){
+                    uploadFile(tokenArray[1]);
+                    }catch (FileNotFoundException e){
                         System.out.println(Strings.COMPLAIN_FILE_NOT_FOUND);
+                        e.printStackTrace();
+                        break;
                     }
                     break;
                 case(Strings.TEARDOWN_COMMAND):
@@ -76,13 +81,14 @@ public class Server extends SocketInteractions{
                         break;
                 }
                     break;
+
                 default:
                     System.out.println("The client says " + clientInput);
                     getObjectOutputStream().writeObject("echo: " + clientInput);
 
             }
         }
-    }
+       }
 
 
     /*

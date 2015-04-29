@@ -33,4 +33,9 @@ public final class Strings{
     public static final String DIRECTORY_COMMAND="";
 
 
+    //COMMNAND LINE
+
+    public static final String SERVER_OR_CLIENT = "Are you setting up a server or a client?";
+
+
 }
