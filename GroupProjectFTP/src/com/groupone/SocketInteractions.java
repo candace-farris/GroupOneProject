@@ -67,12 +67,9 @@ public abstract class SocketInteractions {
 
     /*
    A method which tears down the connection between the server and the client socket
+   4/30/15 - Instead of closing the sockets we've opted to just shut down the program completely.
     */
     public void teardown() throws IOException{
-        getObjectOutputStream().flush();
-        getObjectOutputStream().close();
-        getObjectInputStream().close();
-        getClientSocket().close();
         System.exit(1); //Terminates currently running program
     }
     //Allows
