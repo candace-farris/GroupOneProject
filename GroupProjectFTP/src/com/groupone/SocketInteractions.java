@@ -73,8 +73,10 @@ public abstract class SocketInteractions {
         getObjectOutputStream().close();
         getObjectInputStream().close();
         getClientSocket().close();
-
+        System.exit(1); //Terminates currently running program
     }
+    //Allows
+    
 
     /*
     -------------------------------------GETTERS AND SETTERS------------------------------------------
